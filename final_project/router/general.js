@@ -112,4 +112,32 @@ public_users.get('/asyncisbn/:isbn', (req, res) => {
         });
 });
 
+public_users.get('/asyncauthor/:author', (req, res) => {
+    const author = req.params.author;
+
+    axios.get(`http://localhost:5000/author/${author}`)
+        .then(response => {
+            res.status(200).json(response.data);
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Error fetching books by author"
+            });
+        });
+});
+
+// Get book details based on title using async-await
+public_users.get('/asynctitle/:title', async (req, res) => {
+    const title = req.params.title;
+
+    try {
+        const response = await axios.get(`http://localhost:5000/title/${title}`);
+        return res.status(200).json(response.data);
+    } catch (error) {
+        return res.status(500).json({
+            message: "Error fetching books by title"
+        });
+    }
+});
+
 module.exports.general = public_users;
